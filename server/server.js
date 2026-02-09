@@ -18,8 +18,13 @@ const app = express()
 // MIDDLEWARE (intermediate handlers)
 // ============================================
 
-// CORS - allows frontend (localhost:5173) to access the API
-app.use(cors())
+// CORS - only these origins can call the API (local dev + production frontend)
+app.use(cors({
+  origin: [
+    'http://localhost:5173',
+    'https://e-commerce-ski.vercel.app'
+  ]
+}))
 
 // Parsing JSON in the request body (req.body)
 app.use(express.json())

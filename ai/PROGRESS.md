@@ -124,6 +124,12 @@ Phases:
 
 ---
 
+### Deployment (Render + Vercel)
+- [x] Client uses `VITE_API_URL` for API base URL (fallback localhost for dev)
+- [x] README: Deployment section — MongoDB Atlas, Render (backend), Vercel (client), Google OAuth for production
+
+---
+
 Step log:
 - **Audit (no code changes):** Read PROJECT_CONTEXT, PROGRESS, .cursor rules; explored client (Vite/React/Redux/Router, pages, services, store) and server (Express/MongoDB, routes, models, middleware). Updated ARCHITECTURE_CURRENT.md with frontend/backend stack, structure, API, auth (JWT + sessionStorage), storage (MongoDB + cart in localStorage). Marked phases 1–6 done; 7–11 remain. No Order model or order API; Cart Order button is TODO; My Account, My Orders, Admin Customers, Statistics are stubs or missing.
 - **Phase 7:** Order model (user, items with product ref + quantity, totalAmount, createdAt). orderRepository (createOrder, getOrdersByUserId), orderService (createOrder with validation and stock check, getMyOrders), orderController, orderRoutes (POST /, GET /). Mounted /api/orders. Client: orderService (createOrder, getMyOrders), Cart handleOrder calls createOrder, then dispatch clearCart + logout, navigate to /login. Order button shows loading state.
@@ -137,3 +143,4 @@ Step log:
 - **Phase 10, step 2:** Backend: getSalesByProduct(userId) — optional filter by user (query userId). AdminStatistics: dropdown "All customers" + customers list (getCustomers), on customer select — BarChart (qty by product for that customer's orders), on "All" — PieChart as before. adminService.getSalesByProduct(customerId?) with params.userId.
 - **Optional AI (recommendations):** Per PROJECT_CONTEXT and PROGRESS: cart recommendations — send cart contents + catalog to LLM, get recommendedIds, show in cart under items block with product cards (image, price, Add to cart). Cart panel width increased in cart.css.
 - **Cart per user + admin fixes:** Cart tied to user: localStorage key `cart_${userId}`; cartSlice stores userId, restoreCart accepts { items, userId }; AuthInitializer and Login/Register restore cart by user._id; on logout — clearCart. Cart not shown to admin (App.jsx: Cart only when user?.role !== 'admin'). My Account link added to admin nav.
+- **Deployment prep:** api.js uses `import.meta.env.VITE_API_URL` with fallback to localhost. README: new Deployment section (MongoDB Atlas, Render backend step-by-step, Vercel client step-by-step, Google OAuth production origins).

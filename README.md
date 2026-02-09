@@ -155,9 +155,10 @@ Client runs at **http://localhost:5173** (Vite default).
 
 | Variable | Required | Description |
 |----------|----------|-------------|
+| `VITE_API_URL` | For production | API base URL (e.g. `https://your-backend.onrender.com/api`). If not set, defaults to `http://localhost:3000/api` for local dev. |
 | `VITE_GOOGLE_CLIENT_ID` | For Google login | OAuth 2.0 Web application Client ID from Google Cloud Console |
 
-**Google Sign-In:** In [Google Cloud Console](https://console.cloud.google.com/) → APIs & Services → Credentials, create an OAuth 2.0 Client ID (Web application) and add `http://localhost:5173` to **Authorized JavaScript origins**.
+**Google Sign-In (local):** In [Google Cloud Console](https://console.cloud.google.com/) → APIs & Services → Credentials, create an OAuth 2.0 Client ID (Web application) and add `http://localhost:5173` to **Authorized JavaScript origins**. For production, add your Vercel URL (see [Deployment](#deployment)).
 
 ---
 
@@ -185,6 +186,80 @@ npm start
 cd client
 npm run build
 ```
-Output in `client/dist/`. Serve with any static host; set API base URL if not same origin (e.g. via env or proxy).
+Output in `client/dist/`. Serve with any static host; set `VITE_API_URL` so the client calls your production API.
+
+---
+
+## Deployment
+
+Deploy **backend on Render** and **client on Vercel**. Use **MongoDB Atlas** for the database so all users see the same data.
+
+### 1. MongoDB Atlas
+
+1. Go to [MongoDB Atlas](https://www.mongodb.com/cloud/atlas), sign in or register.
+2. Create a **free cluster** (e.g. M0).
+3. **Database Access** → Add New Database User (username + password; remember them).
+4. **Network Access** → Add IP Address → **Allow Access from Anywhere** (`0.0.0.0/0`) so Render can connect.
+5. **Database** → Connect → **Drivers** → copy the connection string (e.g. `mongodb+srv://user:pass@cluster0.xxxxx.mongodb.net/?retryWrites=true&w=majority`). Replace `<password>` with your DB user password. Optionally add a database name before `?`: `...mongodb.net/ecommerce?retryWrites=...`.
+
+You will use this string as `MONGODB_URI` on Render.
+
+### 2. Backend on Render
+
+1. Go to [Render](https://render.com), sign in, connect your **GitHub** account if needed.
+2. **Dashboard** → **New** → **Web Service**.
+3. Connect the repository that contains this project (e.g. `your-username/e-commerce-ski`). Branch: `main` (or your default).
+4. **Settings:**
+   - **Name:** e.g. `ski-shop-api`
+   - **Region:** choose closest to your users
+   - **Root Directory:** `server` (important — so Render runs from the `server` folder)
+   - **Runtime:** Node
+   - **Build Command:** `npm install`
+   - **Start Command:** `npm start`
+5. **Environment:** Add variables (same as in `server/.env`):
+
+   | Key | Value |
+   |-----|--------|
+   | `MONGODB_URI` | Your Atlas connection string from step 1 |
+   | `JWT_SECRET` | A long random string (e.g. from a password generator) |
+   | `PORT` | Leave empty (Render sets it automatically) |
+   | `GOOGLE_CLIENT_ID` | Same Client ID as in Google Console (needed for Google login on production) |
+   | `OPENAI_API_KEY` | Optional; for cart recommendations |
+
+6. Click **Create Web Service**. Wait for the first deploy. Note the service URL, e.g. `https://ski-shop-api.onrender.com`. The API base URL for the client is this URL + `/api`, e.g. `https://ski-shop-api.onrender.com/api`.
+
+Render free tier may spin down after inactivity; the first request can be slow.
+
+### 3. Frontend on Vercel
+
+1. Go to [Vercel](https://vercel.com), sign in, connect **GitHub** if needed.
+2. **Add New** → **Project** → import the same repository.
+3. **Configure Project:**
+   - **Root Directory:** click **Edit** → set to `client` (so Vercel builds only the frontend).
+   - **Framework Preset:** Vite (should be auto-detected).
+   - **Build Command:** `npm run build`
+   - **Output Directory:** `dist`
+4. **Environment Variables** — add:
+
+   | Name | Value |
+   |------|--------|
+   | `VITE_API_URL` | Your Render API URL from step 2, e.g. `https://ski-shop-api.onrender.com/api` (no trailing slash) |
+   | `VITE_GOOGLE_CLIENT_ID` | Same Google OAuth Client ID as on the backend |
+
+5. Click **Deploy**. When finished, you get a URL like `https://your-project.vercel.app`.
+
+### 4. Google Sign-In on the live site
+
+So that users can log in with Google on the deployed site:
+
+1. Open [Google Cloud Console](https://console.cloud.google.com/) → **APIs & Services** → **Credentials**.
+2. Open your **OAuth 2.0 Client ID** (Web application).
+3. **Authorized JavaScript origins** — add:
+   - `https://your-project.vercel.app` (your Vercel URL)
+   - If you use a custom domain on Vercel, add it too.
+4. **Authorized redirect URIs** — if you use redirects for Google (some setups use popup and don’t need this), add e.g. `https://your-project.vercel.app` or the exact redirect path your library uses.
+5. Save. Changes can take a few minutes to apply.
+
+After this, Login/Register and “Sign in with Google” will work on the live Vercel URL, and the client will call your Render API using `VITE_API_URL`.
 
 

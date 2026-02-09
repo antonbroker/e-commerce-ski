@@ -3,12 +3,13 @@ import axios from 'axios';
 /**
  * Axios instance - configured HTTP client for API
  *
- * baseURL is prepended to all requests
- * e.g. api.get('/health') → http://localhost:3000/api/health
+ * baseURL is prepended to all requests.
+ * In dev: VITE_API_URL not set → http://localhost:3000/api
+ * In production (Vercel): set VITE_API_URL to your Render API URL (e.g. https://your-app.onrender.com/api)
  */
 
 const api = axios.create({
-  baseURL: 'http://localhost:3000/api',
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3000/api',
   headers: {
     'Content-Type': 'application/json',
   },
