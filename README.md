@@ -90,6 +90,50 @@ e-commerce/
 
 ## How to Run
 
+### Установка на свой компьютер (ноутбук)
+
+1. **Установи Node.js 18+** и **MongoDB** (локально или используй [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) бесплатно).
+
+2. **Клонируй репозиторий и зайди в папку:**
+   ```bash
+   git clone https://github.com/antonbroker/e-commerce-ski.git
+   cd e-commerce-ski
+   ```
+
+3. **Бэкенд:** в папке `server` установи зависимости и создай `.env`:
+   ```bash
+   cd server
+   npm install
+   ```
+   Создай файл **`server/.env`** с содержимым (подставь свои значения):
+   ```
+   MONGODB_URI=mongodb://localhost:27017/ecommerce
+   JWT_SECRET=любая_длинная_секретная_строка
+   PORT=3000
+   ```
+   Если используешь Atlas — вставь свою строку подключения в `MONGODB_URI`.  
+   Запуск сервера:
+   ```bash
+   npm run dev
+   ```
+   Сервер: **http://localhost:3000**. Проверка: http://localhost:3000/api/health
+
+4. **Фронтенд:** открой **второй терминал** в корне проекта:
+   ```bash
+   cd client
+   npm install
+   npm run dev
+   ```
+   Клиент: **http://localhost:5173**.  
+   Для локальной разработки `client/.env` не обязателен (API по умолчанию `http://localhost:3000/api`). Если нужен Google Sign-In — создай `client/.env` с `VITE_GOOGLE_CLIENT_ID=...`.
+
+5. **Открой в браузере** http://localhost:5173 → зарегистрируйся или войди.  
+   Чтобы сделать первого пользователя админом: в MongoDB (Compass или Atlas UI) в коллекции `users` найди пользователя и поставь в поле `role` значение `admin`.
+
+6. Если база пустая — зайди под админом и создай категории и товары в разделах **Categories** и **Products**.
+
+---
+
 ### 1. Clone and install dependencies
 
 ```bash

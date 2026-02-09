@@ -6,6 +6,49 @@ import { getAllCategories } from '../services/categoryService'
 import { addToCart, updateQuantity, removeFromCart } from '../store/slices/cartSlice'
 import RangeSlider from '../components/filters/RangeSlider'
 
+/** Thumb URL for catalog: /img/... -> /img/thumbs/....webp (smaller, faster). */
+function getCatalogThumbUrl(imageUrl) {
+  if (!imageUrl || typeof imageUrl !== 'string') return imageUrl
+  if (!imageUrl.includes('/img/')) return imageUrl
+  return imageUrl.replace(/\/img\//, '/img/thumbs/').replace(/\.[a-z]+$/i, '.webp')
+}
+
+/** Image with placeholder skeleton until loaded (reduces perceived wait in catalog). */
+function ProductCardImage({ product, onOpenLightbox }) {
+  const [loaded, setLoaded] = useState(false)
+  const thumbUrl = getCatalogThumbUrl(product.imageUrl)
+  const displayUrl = thumbUrl !== product.imageUrl ? thumbUrl : product.imageUrl
+  return (
+    <div
+      className={`product-image-wrapper${loaded ? ' image-loaded' : ''}`}
+      onClick={() => onOpenLightbox({ url: product.imageUrl, title: product.title })}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => e.key === 'Enter' && onOpenLightbox({ url: product.imageUrl, title: product.title })}
+      aria-label={`View larger image of ${product.title}`}
+    >
+      <div className="product-image-placeholder" aria-hidden="true" />
+      <img
+        src={displayUrl}
+        alt={product.title}
+        className="product-image"
+        loading="lazy"
+        decoding="async"
+        onLoad={() => setLoaded(true)}
+        onError={(e) => {
+          if (e.target.src !== product.imageUrl) {
+            e.target.onerror = null
+            e.target.src = product.imageUrl
+            return
+          }
+          e.target.src = 'https://via.placeholder.com/250x200?text=No+Image'
+          setLoaded(true)
+        }}
+      />
+    </div>
+  )
+}
+
 /**
  * Catalog Page - product catalog
  *
@@ -612,25 +655,7 @@ function Catalog() {
                 
                 return (
                   <div key={product._id} className="product-card">
-                    <div
-                      className="product-image-wrapper"
-                      onClick={() => setLightboxImage({ url: product.imageUrl, title: product.title })}
-                      role="button"
-                      tabIndex={0}
-                      onKeyDown={(e) => e.key === 'Enter' && setLightboxImage({ url: product.imageUrl, title: product.title })}
-                      aria-label={`View larger image of ${product.title}`}
-                    >
-                      <img 
-                        src={product.imageUrl} 
-                        alt={product.title}
-                        className="product-image"
-                        loading="lazy"
-                        decoding="async"
-                        onError={(e) => {
-                          e.target.src = 'https://via.placeholder.com/250x200?text=No+Image'
-                        }}
-                      />
-                    </div>
+                    <ProductCardImage product={product} onOpenLightbox={setLightboxImage} />
 
                     <h3 className="product-title">{product.title}</h3>
                     <p className="product-category">
