@@ -624,6 +624,8 @@ function Catalog() {
                         src={product.imageUrl} 
                         alt={product.title}
                         className="product-image"
+                        loading="lazy"
+                        decoding="async"
                         onError={(e) => {
                           e.target.src = 'https://via.placeholder.com/250x200?text=No+Image'
                         }}

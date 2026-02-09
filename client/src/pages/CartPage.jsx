@@ -111,7 +111,7 @@ function CartPage() {
                 return (
                   <div key={product._id} className="cart-page-item">
                     {product.imageUrl && (
-                      <img src={product.imageUrl} alt="" className="cart-page-item-img" />
+                      <img src={product.imageUrl} alt="" className="cart-page-item-img" loading="lazy" decoding="async" />
                     )}
                     <div className="cart-page-item-info">
                       <h3 className="cart-page-item-title">{product.title}</h3>
@@ -170,7 +170,7 @@ function CartPage() {
                     return (
                       <div key={product._id} className="cart-page-rec-card">
                         {product.imageUrl && (
-                          <img src={product.imageUrl} alt="" className="cart-page-rec-img" />
+                          <img src={product.imageUrl} alt="" className="cart-page-rec-img" loading="lazy" decoding="async" />
                         )}
                         <div className="cart-page-rec-body">
                           <h4 className="cart-page-rec-title">{product.title}</h4>

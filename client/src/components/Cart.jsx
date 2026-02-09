@@ -192,7 +192,7 @@ function Cart() {
                   return (
                     <div key={product._id} className="cart-recommendation-card">
                       {product.imageUrl && (
-                        <img src={product.imageUrl} alt="" className="cart-recommendation-img" />
+                        <img src={product.imageUrl} alt="" className="cart-recommendation-img" loading="lazy" decoding="async" />
                       )}
                       <div className="cart-recommendation-body">
                         <span className="cart-recommendation-title">{product.title}</span>

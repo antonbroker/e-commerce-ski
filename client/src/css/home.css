@@ -16,7 +16,11 @@
   align-items: center;
   justify-content: center;
   padding: 4rem 3rem;
-  background: url(/img/background.png) center bottom / cover no-repeat;
+  background-color: #e8eef4;
+  background-image: url(/img/background.png);
+  background-position: center bottom;
+  background-size: cover;
+  background-repeat: no-repeat;
   overflow: hidden;
 }
 
@@ -266,7 +270,11 @@
   position: relative;
   padding: 4rem 2rem;
   min-height: 860px;
-  background: #fafafa url(/img/skiers-bg.jpg) center center / cover no-repeat;
+  background-color: #fafafa;
+  background-image: url(/img/skiers-bg.jpg);
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
   overflow: hidden;
 }
 

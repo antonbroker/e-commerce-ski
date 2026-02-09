@@ -67,7 +67,7 @@ function Home() {
     <div className="home-page">
       {/* Hero Section: background + snowboarder slides in, greeting and buttons appear together */}
       <section className="hero-section">
-        <img src="/img/snowbordist.png" alt="" className="hero-snowboarder" aria-hidden="true" />
+        <img src="/img/snowbordist.png" alt="" className="hero-snowboarder" aria-hidden="true" fetchPriority="high" decoding="async" />
         <div className="hero-content">
           <div className="hero-greeting">Welcome Back</div>
           <h1 className="hero-title">{userName}</h1>
@@ -168,7 +168,7 @@ function Home() {
 
       {/* Features Section — full-size background, skiers appear on scroll */}
       <section ref={featuresRef} className={`features-section${featuresInView ? ' in-view' : ''}`}>
-        <img src="/img/skiers.png" alt="" className="features-skiers" aria-hidden="true" />
+        <img src="/img/skiers.png" alt="" className="features-skiers" aria-hidden="true" loading="lazy" decoding="async" />
         <h2 className="section-title">Why Choose Us</h2>
         <p className="section-subtitle">Premium gear for your mountain adventures</p>
         <div className="features-grid">

@@ -111,7 +111,7 @@ function GuideChat() {
                     {msg.products.map((product) => (
                       <div key={product._id} className="guide-chat-product-card">
                         <Link to="/catalog" className="guide-chat-product-img-wrap">
-                          <img src={product.imageUrl} alt={product.title} className="guide-chat-product-img" />
+                          <img src={product.imageUrl} alt={product.title} className="guide-chat-product-img" loading="lazy" decoding="async" />
                         </Link>
                         <div className="guide-chat-product-info">
                           <span className="guide-chat-product-title">{product.title}</span>
