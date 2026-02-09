@@ -40,22 +40,32 @@
   color: #111;
 }
 
-/* Google button: full width, same as Login button */
+/* Google button: full width, same as Login button (stay full width after Google re-renders "Continue as Anton") */
 .auth-google-wrap {
-  display: block;
+  display: flex;
   width: 100%;
+  min-width: 100%;
   margin-top: 0.75rem;
+  overflow: hidden;
+}
+
+.auth-google-wrap > div {
+  flex: 1 0 100%;
+  min-width: 100%;
 }
 
 .auth-google-wrap > div,
-.auth-google-wrap > div > div {
+.auth-google-wrap > div > div,
+.auth-google-wrap div {
   width: 100% !important;
   min-width: 100% !important;
   max-width: 100% !important;
+  box-sizing: border-box !important;
 }
 
 .auth-google-wrap iframe {
   width: 100% !important;
   min-width: 100% !important;
+  max-width: 100% !important;
   min-height: 44px;
 }
