@@ -64,12 +64,15 @@
 }
 
 .auth-google-custom-btn {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
+  min-height: 48px;
   padding: 0.75rem 1.5rem;
   background: #fff;
-  color: #111;
-  border: 1px solid #ddd;
+  color: #3c4043;
+  border: 1px solid #dadce0;
   border-radius: 4px;
   font-size: 0.9375rem;
   font-weight: 500;
@@ -77,6 +80,17 @@
   transition: border-color 0.2s ease, background 0.2s ease;
   box-sizing: border-box;
   pointer-events: none;
+}
+
+.auth-google-custom-btn-inner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.auth-google-g {
+  flex-shrink: 0;
 }
 
 .auth-google-custom-btn-loading {
