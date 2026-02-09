@@ -1,0 +1,141 @@
+/* ==========================================
+   ORDERS PAGE - orders list
+   ========================================== */
+
+.orders-page {
+  position: relative;
+  z-index: 0;
+  padding: 40px 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  min-height: calc(100vh - 60px);
+}
+
+.orders-page::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('/img/about.png') center center / cover no-repeat;
+  z-index: -1;
+}
+
+.orders-content-reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  animation: pageFormReveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes pageFormReveal {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.orders-page h1 {
+  font-size: 1.75rem;
+  margin-bottom: 24px;
+  color: #111;
+}
+
+.orders-loading,
+.orders-error {
+  padding: 24px;
+  text-align: center;
+  color: #666;
+}
+
+.orders-error {
+  color: #c00;
+}
+
+.orders-empty {
+  padding: 48px 24px;
+  text-align: center;
+  background: #fafafa;
+  border-radius: 8px;
+  border: 1px solid #e5e5e5;
+}
+
+.orders-empty p {
+  font-size: 1.125rem;
+  color: #555;
+  margin-bottom: 16px;
+}
+
+.orders-empty-link {
+  color: #1a73e8;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.orders-empty-link:hover {
+  text-decoration: underline;
+}
+
+.orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.order-card {
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.order-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #eee;
+}
+
+.order-date {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.order-total {
+  font-weight: 600;
+  color: #111;
+}
+
+.order-items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.order-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  font-size: 0.95rem;
+}
+
+.order-item-title {
+  flex: 1;
+}
+
+.order-item-qty {
+  color: #666;
+}
+
+.order-item-price {
+  font-weight: 500;
+  min-width: 60px;
+  text-align: right;
+}

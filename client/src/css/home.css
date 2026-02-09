@@ -1,0 +1,402 @@
+/* ==========================================
+   HOME PAGE - Light, minimal
+   ========================================== */
+
+.home-page {
+  min-height: 100vh;
+  background: #fff;
+  color: #111;
+}
+
+/* Hero Section - background without snowboarder; snowboarder and text animate on load */
+.hero-section {
+  position: relative;
+  min-height: calc(100vh - 60px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 3rem;
+  background: url(/img/background.png) center bottom / cover no-repeat;
+  overflow: hidden;
+}
+
+/* Snowboarder: slides in from right and stops slightly left of center */
+.hero-snowboarder {
+  position: absolute;
+  left: 42%;
+  right: auto;
+  bottom: 0;
+  height: 85%;
+  width: auto;
+  max-width: 55%;
+  object-fit: contain;
+  object-position: center bottom;
+  transform: translateX(100%);
+  animation: heroSnowboarderIn 1.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  z-index: 1;
+}
+
+@keyframes heroSnowboarderIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Text: one by one top to bottom, smooth */
+.hero-content {
+  text-align: center;
+  max-width: 380px;
+  margin-left: 48%;
+  z-index: 2;
+}
+
+.hero-greeting {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 500;
+  opacity: 0;
+  transform: translateY(14px);
+  animation: heroTextIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+}
+
+.hero-title {
+  font-size: 3.5rem;
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: 1rem;
+  color: #111;
+  letter-spacing: -0.02em;
+  opacity: 0;
+  transform: translateY(14px);
+  animation: heroTextIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
+}
+
+.hero-subtitle {
+  font-size: 1.35rem;
+  color: #666;
+  margin-bottom: 2.5rem;
+  font-weight: 400;
+  line-height: 1.4;
+  opacity: 0;
+  transform: translateY(14px);
+  animation: heroTextIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards;
+}
+
+.hero-cta {
+  opacity: 0;
+  transform: translateY(14px);
+  animation: heroTextIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.8s forwards;
+}
+
+@keyframes heroTextIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-cta {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.cta-button {
+  padding: 0.75rem 1.5rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.cta-primary {
+  background: #111;
+  color: #fff;
+  border: 1px solid #111;
+}
+
+.cta-primary:hover {
+  background: #333;
+  border-color: #333;
+}
+
+.cta-secondary {
+  background: transparent;
+  color: #111;
+  border: 1px solid #111;
+}
+
+.cta-secondary:hover {
+  background: #111;
+  color: #fff;
+}
+
+/* About Section — two columns: text left, stats right, no dividers */
+.about-section {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2rem 5.5rem;
+  align-items: start;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 4rem 2rem 3rem;
+  background: #fff;
+  min-height: auto;
+}
+
+.about-content {
+  padding-left: 2rem;
+}
+
+/* Text: slide in from left, line by line top to bottom */
+.about-content .about-line {
+  opacity: 0;
+  transform: translateX(-50px);
+  transition: opacity 0.55s ease-out, transform 0.55s ease-out;
+}
+
+.about-section.in-view .about-content .about-line {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.about-section.in-view .about-content .about-line:nth-child(1) { transition-delay: 0.05s; }
+.about-section.in-view .about-content .about-line:nth-child(2) { transition-delay: 0.15s; }
+.about-section.in-view .about-content .about-line:nth-child(3) { transition-delay: 0.28s; }
+.about-section.in-view .about-content .about-line:nth-child(4) { transition-delay: 0.41s; }
+.about-section.in-view .about-content .about-line:nth-child(5) { transition-delay: 0.54s; }
+.about-section.in-view .about-content .about-line:nth-child(6) { transition-delay: 0.67s; }
+.about-section.in-view .about-content .about-line:nth-child(7) { transition-delay: 0.8s; }
+.about-section.in-view .about-content .about-line:nth-child(8) { transition-delay: 0.93s; }
+.about-section.in-view .about-content .about-line:nth-child(9) { transition-delay: 1.06s; }
+
+/* Cards: slide in from right, one by one top to bottom */
+.about-stats .about-stat-item {
+  opacity: 0;
+  transform: translateX(50px);
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+
+.about-section.in-view .about-stats .about-stat-item {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.about-section.in-view .about-stats .about-stat-item:nth-child(1) { transition-delay: 0.1s; }
+.about-section.in-view .about-stats .about-stat-item:nth-child(2) { transition-delay: 0.25s; }
+.about-section.in-view .about-stats .about-stat-item:nth-child(3) { transition-delay: 0.4s; }
+.about-section.in-view .about-stats .about-stat-item:nth-child(4) { transition-delay: 0.55s; }
+
+.about-section h2 {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.02em;
+  text-align: left;
+}
+
+.about-section p {
+  font-size: 1.1rem;
+  font-weight: 400;
+  color: #1a1a1a;
+  line-height: 1.75;
+  margin-bottom: 1rem;
+  text-align: left;
+}
+
+.about-section p:last-of-type {
+  margin-bottom: 0;
+}
+
+/* Stats column on the right — framed cards, aligned with text height */
+.about-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding-top: 5.25rem;
+}
+
+.about-section .stat-card {
+  text-align: center;
+  padding: 1.25rem 1.75rem;
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  background: #fafafa;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  min-width: 140px;
+}
+
+.about-section .stat-number {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 0.35rem;
+  letter-spacing: -0.02em;
+}
+
+.about-section .stat-label {
+  font-size: 0.875rem;
+  color: #666;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .about-section {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Features Section — full-size background, skiers on scroll */
+.features-section {
+  position: relative;
+  padding: 4rem 2rem;
+  min-height: 860px;
+  background: #fafafa url(/img/skiers-bg.jpg) center center / cover no-repeat;
+  overflow: hidden;
+}
+
+.features-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.82);
+  z-index: 0;
+}
+
+.features-skiers {
+  position: absolute;
+  right: 4%;
+  bottom: 8%;
+  height: 88%;
+  max-width: 62%;
+  width: auto;
+  object-fit: contain;
+  object-position: right bottom;
+  z-index: 1;
+  opacity: 0;
+  transform: translateX(80%);
+  transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.features-section.in-view .features-skiers {
+  opacity: 1;
+  transform: translateX(-42%);
+}
+
+.features-section .section-title,
+.features-section .section-subtitle,
+.features-section .features-grid {
+  position: relative;
+  z-index: 2;
+}
+
+.section-title {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #111;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.section-subtitle {
+  text-align: center;
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 3rem;
+}
+
+.features-grid {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.feature-card {
+  background: #fafafa;
+  padding: 1.5rem 1.75rem;
+  border-radius: 12px;
+  border: 1px solid #e5e5e5;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.feature-card:hover {
+  border-color: #ccc;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.feature-icon {
+  display: block;
+  font-size: 1.25rem;
+  color: #666;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+}
+
+.feature-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #111;
+}
+
+.feature-description {
+  font-size: 0.875rem;
+  color: #666;
+  line-height: 1.5;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hero-section {
+    justify-content: center;
+    padding: 3rem 1.5rem;
+  }
+
+  .hero-snowboarder {
+    height: 60%;
+    max-width: 70%;
+  }
+
+  .hero-content {
+    text-align: center;
+    margin-left: 0;
+  }
+
+  .hero-cta {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hero-title {
+    font-size: 2.25rem;
+  }
+
+  .cta-button {
+    width: 100%;
+    max-width: 280px;
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+}

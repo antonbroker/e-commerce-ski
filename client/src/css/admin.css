@@ -1,0 +1,176 @@
+/* ==========================================
+   ADMIN PAGES - Light theme
+   ========================================== */
+
+.admin-page {
+  padding: 2rem 1.5rem 2rem 5rem; /* right padding so cart button doesn't overlap table */
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: calc(100vh - 60px);
+  background: #fff;
+  color: #111;
+}
+
+.admin-categories-card {
+  margin: 0 auto;
+  max-width: 1200px;
+}
+
+.admin-page h1 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #111;
+  margin-bottom: 1.5rem;
+}
+
+.admin-page h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111;
+  margin-bottom: 1rem;
+}
+
+/* Admin Table - own layer so row clicks are not intercepted */
+.admin-table-container {
+  background: #fff;
+  border-radius: 4px;
+  padding: 1rem;
+  border: 1px solid #e5e5e5;
+  overflow-x: auto;
+  position: relative;
+  z-index: 1;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  color: #111;
+}
+
+.admin-table thead {
+  background: #fafafa;
+}
+
+.admin-table th {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.8125rem;
+  color: #333;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.admin-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #eee;
+}
+
+.admin-table tbody tr:hover {
+  background: #fafafa;
+}
+
+.admin-table input,
+.admin-table select {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  color: #111;
+}
+
+.admin-table input:focus,
+.admin-table select:focus {
+  outline: none;
+  border-color: #111;
+}
+
+/* Admin Buttons */
+.admin-btn {
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.8125rem;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.admin-btn-primary {
+  background: #111;
+  color: #fff;
+  border: 1px solid #111;
+}
+
+.admin-btn-primary:hover {
+  background: #333;
+  border-color: #333;
+}
+
+.admin-btn-danger {
+  background: #fff;
+  color: #b91c1c;
+  border: 1px solid #b91c1c;
+}
+
+.admin-btn-danger:hover {
+  background: #b91c1c;
+  color: #fff;
+}
+
+.admin-btn-secondary {
+  background: #fff;
+  color: #111;
+  border: 1px solid #111;
+}
+
+.admin-btn-secondary:hover {
+  background: #111;
+  color: #fff;
+}
+
+.admin-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Add New Button */
+.add-new-btn {
+  padding: 0.5rem 1rem;
+  background: #111;
+  color: #fff;
+  border: 1px solid #111;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.add-new-btn:hover {
+  background: #333;
+  border-color: #333;
+}
+
+/* Loading / Error */
+.loading-state {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+  font-size: 1rem;
+}
+
+.error-state {
+  text-align: center;
+  padding: 2rem;
+  color: #b91c1c;
+  font-size: 1rem;
+}
+
+.error-message {
+  padding: 0.75rem 1rem;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 4px;
+  color: #b91c1c;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+}

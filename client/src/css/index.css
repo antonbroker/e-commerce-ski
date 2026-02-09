@@ -1,0 +1,17 @@
+/* ==========================================
+   MAIN CSS FILE - Imports all styles
+   ========================================== */
+
+@import './global.css';
+@import './auth.css';
+@import './forms.css';
+@import './buttons.css';
+@import './utils.css';
+@import './navigation.css';
+@import './home.css';
+@import './catalog.css';
+@import './cart.css';
+@import './cart-page.css';
+@import './admin.css';
+@import './orders.css';
+@import './account.css';
