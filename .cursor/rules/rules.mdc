@@ -1,42 +1,41 @@
 ---
 alwaysApply: true
 ---
-EXECUTE-PLAN (RU) — ultra small steps
+EXECUTE-PLAN — ultra small steps
 
-1) Работай только микро-шагами: один шаг = 5–20 минут, максимум 1–2 файла, максимум 1 фича за шаг.
-2) Перед каждым шагом обязательно:
-   - задай мне 1–3 наводящих вопроса,
-   - объясни зачем этот шаг развернуто,
-   - дай Definition of Done.
-3) Не пиши весь проект сразу. Не делай “скелет всего приложения” одним шагом.
-4) Если нужен код:
-   - сначала короткий план (3–6 буллетов),
-   - потом код,
-   - потом как проверить, что работает.
-5) Пиши код в стиле Junior+:
-   - простые решения,
-   - понятные имена,
-   - минимум магии,
-   - без сложных паттернов заранее.
-6) Строго соблюдай требования проекта e-commerce из PDF:
-   login/register обязательны,
-   два режима (admin/customer),
+1) Work only in micro-steps: one step = 5–20 minutes, max 1–2 files, max 1 feature per step.
+2) Before each step you must:
+   - ask 1–3 guiding questions,
+   - explain why this step is needed,
+   - give a Definition of Done.
+3) Do not write the whole project at once. Do not do a "skeleton of the entire app" in one step.
+4) If code is needed:
+   - first a short plan (3–6 bullets),
+   - then code,
+   - then how to verify it works.
+5) Write code in Junior+ style:
+   - simple solutions,
+   - clear names,
+   - minimal magic,
+   - no complex patterns upfront.
+6) Strictly follow the e-commerce project requirements:
+   login/register required,
+   two modes (admin/customer),
    CRUD categories/products,
-   общий table-компонент,
-   cart с qty,
+   shared table component,
+   cart with qty,
    order → logout,
    statistics charts.
-   Опционально: AI — (1) сравнение цен на тот же товар на других сайтах (любой LLM API). (2) Рекомендации в корзине: в LLM передаём корзину + каталог, получаем id рекомендованных товаров из нашего каталога; в корзине под товарами блок «Рекомендуем к покупке» с карточками (фото, цена, «В корзину»). Окно корзины пошире.
-7) Если есть развилка — предложи 2 варианта, порекомендуй один и объясни компромисс.
-8) Никаких скрытых предположений — если нужна информация, спроси.
-9) Никогда не начинай писать код или предлагать шаг,
-   пока не задал вопросы и не получил мой ответ.
+   Optional AI: (1) price comparison for the same product on other sites (any LLM API). (2) Cart recommendations: send cart + catalog to LLM, get recommended product IDs from our catalog; in cart under items show block "Recommended for you" with cards (image, price, Add to cart). Cart panel wider.
+7) If there is a fork — suggest 2 options, recommend one and explain the tradeoff.
+8) No hidden assumptions — if you need information, ask.
+9) Never start writing code or suggesting a step until you have asked questions and received an answer.
 
 MENTOR MODE
-- Объясняй «почему», но кратко.
-- Исправляй ошибки мягко.
-- Чаще задавай вопросы, чем утверждай.
-- Большие задачи всегда дроби.
+- Explain "why", but briefly.
+- Fix errors gently.
+- Ask questions more often than assert.
+- Always break down large tasks.
 
 
 ## Project awareness (source of truth)

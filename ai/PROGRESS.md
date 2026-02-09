@@ -17,123 +17,123 @@ Phases:
 
 ---
 
-### Фаза 1. Setup & base architecture
+### Phase 1. Setup & base architecture
 - [x] React + Vite client, Redux Toolkit, React Router
 - [x] Express + MongoDB server, Mongoose
 - [x] API: axios, baseURL, CORS
 
-### Фаза 2. Auth (Login/Register)
-- [x] Страница Login, форма входа
-- [x] Страница Register, ссылка с Login
-- [x] JWT, сохранение токена (sessionStorage), восстановление при загрузке
-- [x] Разделение роутов и меню: admin / customer
+### Phase 2. Auth (Login/Register)
+- [x] Login page, login form
+- [x] Register page, link from Login
+- [x] JWT, token stored in sessionStorage, restored on load
+- [x] Route and menu split: admin / customer
 
-### Фаза 3. Admin: Categories CRUD
-- [x] Список категорий
-- [x] Добавление категории
-- [x] Редактирование (Update → поле ввода → сохранение)
-- [x] Удаление категории
+### Phase 3. Admin: Categories CRUD
+- [x] Categories list
+- [x] Add category
+- [x] Edit (Update → input field → save)
+- [x] Delete category
 
-### Фаза 4. Admin: Products CRUD
-- [x] Список продуктов (данные, категория, картинка)
-- [x] Добавление продукта (Add New)
-- [x] Редактирование и удаление продукта
+### Phase 4. Admin: Products CRUD
+- [x] Products list (data, category, image)
+- [x] Add product (Add New)
+- [x] Edit and delete product
 
-### Фаза 5. Customer: Catalog + Filters
-- [x] Страница каталога, карточки товаров
-- [x] Фильтры: категория (динамически из админки), цена, название/поиск
-- [x] Доп. фильтры (бренд, цвет, сортировка)
+### Phase 5. Customer: Catalog + Filters
+- [x] Catalog page, product cards
+- [x] Filters: category (from admin), price, name/search
+- [x] Extra filters (brand, color, sort)
 
-### Фаза 6. Cart (qty + totals + open/close)
-- [x] Корзина: открытие/закрытие по кнопке-стрелке
-- [x] Список позиций, сумма по позиции, общая сумма
-- [x] Кнопки +/- в каталоге и в корзине, обновление в Redux
-- [x] Сохранение корзины в localStorage
+### Phase 6. Cart (qty + totals + open/close)
+- [x] Cart: open/close via toggle button
+- [x] Item list, line total, grand total
+- [x] +/- buttons in catalog and cart, Redux update
+- [x] Cart saved in localStorage
 
-### Фаза 7. Orders (place order => logout)
-- [x] Модель Order и API (POST /api/orders, GET /api/orders — мои заказы)
-- [x] Кнопка Order в корзине отправляет заказ на сервер
-- [x] После успешного заказа: очистка корзины + logout
+### Phase 7. Orders (place order => logout)
+- [x] Order model and API (POST /api/orders, GET /api/orders — my orders)
+- [x] Order button in cart sends order to server
+- [x] After successful order: clear cart + logout
 
-**Phase 7 — что сделано и зачем (подробно):**
+**Phase 7 — what was done and why (detail):**
 
-**Бэкенд**
+**Backend**
 
-1. **`server/models/Order.js`** — модель заказа в MongoDB.
-   - **Зачем:** чтобы хранить заказы: кто заказал, какие товары, в каком количестве, на какую сумму, когда.
-   - **Поля:** `user` (ref на User), `items` (массив `{ product: ref Product, quantity }`), `totalAmount`, `createdAt`. Валидация: минимум один товар, quantity ≥ 1.
-   - **Индекс** `{ user: 1, createdAt: -1 }` — быстрая выборка «мои заказы» по пользователю, сортировка по дате.
-   - **toJSON** убирает `__v` из ответа.
+1. **`server/models/Order.js`** — order model in MongoDB.
+   - **Why:** to store orders: who ordered, which products, quantity, total, when.
+   - **Fields:** `user` (ref to User), `items` (array `{ product: ref Product, quantity }`), `totalAmount`, `createdAt`. Validation: at least one item, quantity ≥ 1.
+   - **Index** `{ user: 1, createdAt: -1 }` — fast "my orders" by user, sorted by date.
+   - **toJSON** removes `__v` from response.
 
-2. **`server/repositories/orderRepository.js`** — слой доступа к БД.
-   - **`createOrder(orderData)`** — сохраняет заказ, возвращает его с populate `user` (firstName, lastName, email) и `items.product` (title, price), чтобы в ответе API сразу были читаемые данные.
-   - **`getOrdersByUserId(userId)`** — все заказы пользователя с populate `items.product` (title, price, imageUrl), сортировка по дате (новые первые).
-   - **Зачем:** разделение «работа с БД» и «бизнес-логика»; один раз настроенный populate не дублировать в сервисе.
+2. **`server/repositories/orderRepository.js`** — DB access layer.
+   - **`createOrder(orderData)`** — saves order, returns it with populate `user` (firstName, lastName, email) and `items.product` (title, price) so API response has readable data.
+   - **`getOrdersByUserId(userId)`** — all orders for user with populate `items.product` (title, price, imageUrl), sorted by date (newest first).
+   - **Why:** separate "DB work" and "business logic"; configure populate once, no duplication in service.
 
-3. **`server/services/orderService.js`** — бизнес-логика заказов.
-   - **`createOrder(userId, { items, totalAmount })`:** проверяет, что items — непустой массив и totalAmount — число; для каждой позиции — существование продукта и достаточный stock; пересчитывает сумму по ценам из БД; если переданная totalAmount не совпадает с пересчитанной (с допуском 0.01) — ошибка (защита от подделки суммы с клиента). Создаёт заказ через репозиторий.
-   - **Зачем:** нельзя создать заказ с несуществующим товаром, с количеством больше остатка или с неправильной суммой.
-   - **`getMyOrders(userId)`** — просто прокидывает запрос в репозиторий (логика «только свои заказы» обеспечивается контроллером через req.user).
+3. **`server/services/orderService.js`** — order business logic.
+   - **`createOrder(userId, { items, totalAmount })`:** checks items is non-empty array and totalAmount is number; for each item — product exists and enough stock; recalculates total from DB prices; if given totalAmount does not match (within 0.01) — error (protect against client tampering). Creates order via repository.
+   - **Why:** cannot create order with non-existent product, quantity above stock, or wrong total.
+   - **`getMyOrders(userId)`** — forwards to repository (controller uses req.user for "own orders only").
 
-4. **`server/controllers/orderController.js`** — HTTP-обработчики.
-   - **POST:** берёт `items`, `totalAmount` из body, передаёт в сервис вместе с `req.user._id`; при успехе — 201 и `{ order }`, при ошибке — 400 (not found / not enough stock) или 500, тело `{ error: message }`.
-   - **GET:** вызывает getMyOrders(req.user._id), возвращает 200 и `{ orders }`.
-   - **Зачем:** единая точка входа с API, преобразование ошибок в коды и JSON.
+4. **`server/controllers/orderController.js`** — HTTP handlers.
+   - **POST:** takes `items`, `totalAmount` from body, passes to service with `req.user._id`; on success — 201 and `{ order }`, on error — 400 (not found / not enough stock) or 500, body `{ error: message }`.
+   - **GET:** calls getMyOrders(req.user._id), returns 200 and `{ orders }`.
+   - **Why:** single API entry point, map errors to status codes and JSON.
 
-5. **`server/routes/orderRoutes.js`** — маршруты.
-   - POST `/` и GET `/` с `authMiddleware` — без токена запросы не проходят.
-   - В **`server/server.js`** роуты подключены как `app.use('/api/orders', orderRoutes)`.
+5. **`server/routes/orderRoutes.js`** — routes.
+   - POST `/` and GET `/` with `authMiddleware` — requests without token are rejected.
+   - In **`server/server.js`** routes mounted as `app.use('/api/orders', orderRoutes)`.
 
-**Фронтенд**
+**Frontend**
 
-6. **`client/src/services/orderService.js`** — клиентский слой для API заказов.
-   - **`createOrder(payload)`** — POST `/orders` с `{ items: [{ productId, quantity }], totalAmount }` (axios уже с baseURL и токеном из api).
-   - **`getMyOrders()`** — GET `/orders`, возвращает данные для страницы «Мои заказы».
-   - **Зачем:** один раз настроенный вызов API, переиспользование в Cart и на будущей странице Orders.
+6. **`client/src/services/orderService.js`** — client layer for orders API.
+   - **`createOrder(payload)`** — POST `/orders` with `{ items: [{ productId, quantity }], totalAmount }` (axios has baseURL and token from api).
+   - **`getMyOrders()`** — GET `/orders`, returns data for My Orders page.
+   - **Why:** single place for API calls, reused in Cart and Orders page.
 
-7. **`client/src/components/Cart.jsx`** — поведение кнопки «Order».
-   - **`handleOrder`:** если корзина пуста — выход; иначе `setOrderLoading(true)`, вызов `createOrder` с маппингом корзины в `{ productId, quantity }` и `totalPrice` как totalAmount. При успехе: `dispatch(clearCart())`, `dispatch(logout())`, `navigate('/login')`. При ошибке — alert с текстом из ответа сервера; в `finally` — `setOrderLoading(false)`.
-   - Кнопка во время запроса: `disabled={orderLoading}`, текст «Placing order...» / «Order».
-   - **Зачем:** по ТЗ после оформления заказа — выход из аккаунта; корзина очищается, чтобы при следующем входе не показывать старый заказ; пользователь видит состояние загрузки и сообщение об ошибке (например, «Not enough stock»).
+7. **`client/src/components/Cart.jsx`** — Order button behaviour.
+   - **`handleOrder`:** if cart empty — return; else `setOrderLoading(true)`, call `createOrder` with cart mapped to `{ productId, quantity }` and `totalPrice` as totalAmount. On success: `dispatch(clearCart())`, `dispatch(logout())`, `navigate('/login')`. On error — alert with server message; in `finally` — `setOrderLoading(false)`.
+   - Button during request: `disabled={orderLoading}`, text "Placing order..." / "Order".
+   - **Why:** per spec, after placing order user logs out; cart cleared so next login does not show old order; user sees loading and error (e.g. "Not enough stock").
 
-**Итог по Phase 7:** заказ сохраняется в БД с привязкой к пользователю и актуальными ценами/остатками на момент создания; клиент может оформить заказ из корзины и после успеха разлогинивается; API для «мои заказы» (GET) готов для страницы My Orders в Phase 8. Уменьшение stock при заказе в этой фазе не реализовано (при желании добавляется отдельным шагом).
+**Phase 7 summary:** order saved in DB with user and current prices/stock at creation time; client can place order from cart and logs out on success; GET orders API ready for My Orders in Phase 8. Stock decrement on order not in this phase (can be added later).
 
 ---
 
-### Фаза 8. Customer: My Account + My Orders
-- [x] Страница My Account (просмотр и редактирование своих данных)
-- [x] Страница My Orders (список своих заказов)
+### Phase 8. Customer: My Account + My Orders
+- [x] My Account page (view and edit own data)
+- [x] My Orders page (list of own orders)
 
-### Фаза 9. Admin: Customers page
-- [x] Список всех пользователей (customers)
-- [x] Отображение заказов по каждому пользователю
+### Phase 9. Admin: Customers page
+- [x] List of all customers
+- [x] Show orders per customer
 
-### Фаза 10. Statistics
-- [x] Круговая диаграмма (продажи по продуктам)
-- [x] Столбчатая диаграмма (qty по продуктам по клиенту)
-- [x] Выбор пользователя в выпадающем списке
+### Phase 10. Statistics
+- [x] Pie chart (sales by product)
+- [x] Bar chart (qty by product per customer)
+- [x] Customer dropdown
 
-### Фаза 11. Polish
-- [ ] Единый table-компонент для всех таблиц
-- [ ] UX и валидации по необходимости
+### Phase 11. Polish
+- [ ] Shared table component for all tables
+- [ ] UX and validations as needed
 
-### Опционально: AI (рекомендации в корзине)
-- [ ] Backend: POST /api/recommendations — передаём id товаров в корзине; отправляем в OpenAI (корзина + каталог), получаем recommendedIds; возвращаем полные товары из БД (imageUrl, price, title).
-- [ ] Frontend: в корзине под списком товаров блок «Рекомендуем к покупке» с карточками рекомендованных товаров (фото, цена, «В корзину»).
-- [ ] Окно корзины сделано пошире для размещения блока рекомендаций.
+### Optional: AI (cart recommendations)
+- [x] Backend: POST /api/recommendations — send cart product IDs; call OpenAI (cart + catalog), get recommendedIds; return full products from DB (imageUrl, price, title).
+- [x] Frontend: in cart under items block "Recommended for you" with recommendation cards (image, price, Add to cart).
+- [x] Cart panel widened for recommendations block.
 
 ---
 
 Step log:
 - **Audit (no code changes):** Read PROJECT_CONTEXT, PROGRESS, .cursor rules; explored client (Vite/React/Redux/Router, pages, services, store) and server (Express/MongoDB, routes, models, middleware). Updated ARCHITECTURE_CURRENT.md with frontend/backend stack, structure, API, auth (JWT + sessionStorage), storage (MongoDB + cart in localStorage). Marked phases 1–6 done; 7–11 remain. No Order model or order API; Cart Order button is TODO; My Account, My Orders, Admin Customers, Statistics are stubs or missing.
 - **Phase 7:** Order model (user, items with product ref + quantity, totalAmount, createdAt). orderRepository (createOrder, getOrdersByUserId), orderService (createOrder with validation and stock check, getMyOrders), orderController, orderRoutes (POST /, GET /). Mounted /api/orders. Client: orderService (createOrder, getMyOrders), Cart handleOrder calls createOrder, then dispatch clearCart + logout, navigate to /login. Order button shows loading state.
-- **Phase 8, шаг 1:** Orders.jsx — getMyOrders() в useEffect, состояния loading/error/orders. Рендер: loading, ошибка, пустой список («У вас пока нет заказов» + ссылка на каталог), список заказов (карточка: дата, сумма, состав — название, qty, цена). orders.css добавлен и подключён в index.css.
-- **Phase 8, шаг 2:** Backend PATCH /api/auth/me — authService.updateProfile(userId, { firstName, lastName }), authController.updateProfileController (валидация trim + min 2), роут PATCH /me с authMiddleware. Ответ 200 { user }; при ошибке 400/404/500.
-- **Phase 8, шаг 3:** Frontend My Account: authService.updateProfile(), authSlice.updateUser, страница Account.jsx (email/username read-only, firstName/lastName форма, Save → PATCH + dispatch updateUser), роут /account, ссылка My Account в навигации для customer, account.css.
-- **Nav:** Home и About показываются только для customer; для admin в навигации только Categories, Products, Statistics, Customers.
-- **Phase 9, шаг 1:** Backend GET /api/admin/customers (auth + isAdmin), userRepository.getUsersByRole('customer'), adminController.getCustomersController, adminRoutes, mount /api/admin. Frontend: adminService.getCustomers(), AdminCustomers.jsx (таблица customers), роут /admin/customers, пункт Customers в админ-меню.
-- **Phase 9, шаг 2:** Заказы по customer: GET /api/admin/customers/:id/orders (orderRepository.getOrdersByUserId), adminController.getCustomerOrdersController. Client: getCustomerOrders(id), по клику на строку — selectedCustomer, загрузка заказов, блок под таблицей «Orders: [имя]» (дата, сумма, состав). Повторный клик по той же строке снимает выбор.
-- **Phase 10, шаг 1:** Recharts установлен. Backend: GET /api/admin/statistics/sales-by-product (auth+admin), orderRepository.getSalesByProduct() — агрегация по заказам (quantity по product), ответ [{ name, value }]. Client: getSalesByProduct(), AdminStatistics — круговая диаграмма (PieChart), загрузка/пусто/ошибка.
-- **Phase 10, шаг 2:** Backend: getSalesByProduct(userId) — опциональный фильтр по user (query userId). AdminStatistics: dropdown «All customers» + список customers (getCustomers), при выборе клиента — BarChart (qty по продуктам по его заказам), при «All» — PieChart как раньше. adminService.getSalesByProduct(customerId?) с params.userId.
-- **Optional AI (recommendations):** Зафиксировано в PROJECT_CONTEXT и PROGRESS: рекомендации в корзине — в LLM передаём содержимое корзины + каталог, получаем recommendedIds, показываем в корзине под товарами блок с карточками наших товаров (фото, цена, «В корзину»). Окно корзины расширено (width увеличена в cart.css).
-- **Cart per user + admin fixes:** Корзина привязана к пользователю: localStorage ключ `cart_${userId}`; cartSlice хранит userId, restoreCart принимает { items, userId }; AuthInitializer и Login/Register восстанавливают корзину по user._id; при logout — clearCart. Корзина не показывается админу (App.jsx: Cart только при user?.role !== 'admin'). В навигации для админа добавлена ссылка My Account.
+- **Phase 8, step 1:** Orders.jsx — getMyOrders() in useEffect, loading/error/orders state. Render: loading, error, empty list ("No orders yet." + link to catalog), orders list (card: date, total, items — name, qty, price). orders.css added and imported in index.css.
+- **Phase 8, step 2:** Backend PATCH /api/auth/me — authService.updateProfile(userId, { firstName, lastName }), authController.updateProfileController (trim + min 2 validation), route PATCH /me with authMiddleware. Response 200 { user }; on error 400/404/500.
+- **Phase 8, step 3:** Frontend My Account: authService.updateProfile(), authSlice.updateUser, Account.jsx page (email/username read-only, firstName/lastName form, Save → PATCH + dispatch updateUser), route /account, My Account link in nav for customer, account.css.
+- **Nav:** Home and About shown only for customer; for admin nav has Categories, Products, Statistics, Customers.
+- **Phase 9, step 1:** Backend GET /api/admin/customers (auth + isAdmin), userRepository.getUsersByRole('customer'), adminController.getCustomersController, adminRoutes, mount /api/admin. Frontend: adminService.getCustomers(), AdminCustomers.jsx (customers table), route /admin/customers, Customers in admin menu.
+- **Phase 9, step 2:** Orders per customer: GET /api/admin/customers/:id/orders (orderRepository.getOrdersByUserId), adminController.getCustomerOrdersController. Client: getCustomerOrders(id), on row click — selectedCustomer, load orders, block below table "Orders: [name]" (date, total, items). Clicking same row again clears selection.
+- **Phase 10, step 1:** Recharts installed. Backend: GET /api/admin/statistics/sales-by-product (auth+admin), orderRepository.getSalesByProduct() — aggregation over orders (quantity per product), response [{ name, value }]. Client: getSalesByProduct(), AdminStatistics — pie chart (PieChart), loading/empty/error.
+- **Phase 10, step 2:** Backend: getSalesByProduct(userId) — optional filter by user (query userId). AdminStatistics: dropdown "All customers" + customers list (getCustomers), on customer select — BarChart (qty by product for that customer's orders), on "All" — PieChart as before. adminService.getSalesByProduct(customerId?) with params.userId.
+- **Optional AI (recommendations):** Per PROJECT_CONTEXT and PROGRESS: cart recommendations — send cart contents + catalog to LLM, get recommendedIds, show in cart under items block with product cards (image, price, Add to cart). Cart panel width increased in cart.css.
+- **Cart per user + admin fixes:** Cart tied to user: localStorage key `cart_${userId}`; cartSlice stores userId, restoreCart accepts { items, userId }; AuthInitializer and Login/Register restore cart by user._id; on logout — clearCart. Cart not shown to admin (App.jsx: Cart only when user?.role !== 'admin'). My Account link added to admin nav.
