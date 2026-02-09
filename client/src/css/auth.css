@@ -40,32 +40,21 @@
   color: #111;
 }
 
-/* Google button: full width, same as Login button (stay full width after Google re-renders "Continue as Anton") */
+/* Google button: full width, don't override inner layout (fixes broken "red semicircle" rendering) */
 .auth-google-wrap {
-  display: flex;
+  display: block;
   width: 100%;
-  min-width: 100%;
   margin-top: 0.75rem;
-  overflow: hidden;
 }
 
 .auth-google-wrap > div {
-  flex: 1 0 100%;
-  min-width: 100%;
-}
-
-.auth-google-wrap > div,
-.auth-google-wrap > div > div,
-.auth-google-wrap div {
+  display: block !important;
   width: 100% !important;
-  min-width: 100% !important;
   max-width: 100% !important;
-  box-sizing: border-box !important;
 }
 
 .auth-google-wrap iframe {
   width: 100% !important;
-  min-width: 100% !important;
   max-width: 100% !important;
   min-height: 44px;
 }

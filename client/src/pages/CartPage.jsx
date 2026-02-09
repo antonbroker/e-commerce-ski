@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { updateQuantity, removeFromCart, clearCart, addToCart } from '../store/slices/cartSlice'
-import { logout } from '../store/slices/authSlice'
-import { createOrder } from '../services/orderService'
+import { updateQuantity, removeFromCart, addToCart } from '../store/slices/cartSlice'
 import { getRecommendations } from '../services/recommendationService'
 
 /**
@@ -21,7 +19,7 @@ function CartPage() {
     if (user?.role === 'admin') navigate('/', { replace: true })
   }, [isAuthenticated, user?.role, navigate])
 
-  const [orderLoading, setOrderLoading] = useState(false)
+  const [showPaymentStub, setShowPaymentStub] = useState(false)
   const [recommendations, setRecommendations] = useState([])
   const [recommendationsLoading, setRecommendationsLoading] = useState(false)
 
@@ -71,26 +69,9 @@ function CartPage() {
     dispatch(addToCart(product))
   }
 
-  const handleOrder = async () => {
+  const handleOrder = () => {
     if (items.length === 0) return
-    setOrderLoading(true)
-    try {
-      await createOrder({
-        items: items.map((item) => ({
-          productId: item.product._id,
-          quantity: item.quantity
-        })),
-        totalAmount: totalPrice
-      })
-      dispatch(clearCart())
-      dispatch(logout())
-      navigate('/login')
-    } catch (err) {
-      const message = err.response?.data?.error || err.message || 'Order failed'
-      alert(message)
-    } finally {
-      setOrderLoading(false)
-    }
+    setShowPaymentStub(true)
   }
 
   return (
@@ -144,6 +125,12 @@ function CartPage() {
               })}
             </section>
 
+            {showPaymentStub && (
+              <div className="cart-payment-stub">
+                <p>Payment system coming soon</p>
+                <button type="button" className="cart-payment-stub-close" onClick={() => setShowPaymentStub(false)}>OK</button>
+              </div>
+            )}
             <div className="cart-page-order-row">
               <div className="cart-page-total">
                 <span>Total:</span>
@@ -153,9 +140,8 @@ function CartPage() {
                 type="button"
                 className="cart-page-order-btn"
                 onClick={handleOrder}
-                disabled={orderLoading}
               >
-                {orderLoading ? 'Placing order...' : 'Place order'}
+                Place order
               </button>
             </div>
 

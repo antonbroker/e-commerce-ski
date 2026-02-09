@@ -27,6 +27,7 @@
 
 /* Cart Header */
 .cart-header {
+  flex-shrink: 0;
   padding: 20px;
   border-bottom: 2px solid #eee;
   display: flex;
@@ -54,9 +55,10 @@
   color: #3498db;
 }
 
-/* Cart Content */
+/* Cart Content - scrollable so footer with Order stays visible on mobile */
 .cart-content {
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
   padding: 20px;
 }
@@ -107,11 +109,46 @@
   color: #2c3e50;
 }
 
-/* Cart Footer */
+/* Cart Footer - always visible at bottom (Order button) */
 .cart-footer {
+  flex-shrink: 0;
   padding: 20px;
   border-top: 2px solid #eee;
   background-color: #f8f9fa;
+}
+
+.cart-payment-stub {
+  padding: 12px 16px;
+  margin-bottom: 12px;
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.cart-payment-stub p {
+  margin: 0;
+  color: #0369a1;
+  font-weight: 500;
+  font-size: 0.9375rem;
+}
+
+.cart-payment-stub-close {
+  padding: 6px 14px;
+  background: #0ea5e9;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.cart-payment-stub-close:hover {
+  background: #0284c7;
 }
 
 .cart-total {
