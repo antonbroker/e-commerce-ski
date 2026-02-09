@@ -75,9 +75,11 @@ function Cart() {
     dispatch(addToCart(product))
   }
 
-  const handleOrder = () => {
+  const handleOrder = (e) => {
+    if (e && e.preventDefault) e.preventDefault()
     if (items.length === 0) return
     setShowPaymentStub(true)
+    // Stub only — no API call, no logout, no redirect
   }
 
   // When cart is closed, show only the toggle button
@@ -208,6 +210,7 @@ function Cart() {
             <span>${totalPrice.toFixed(2)}</span>
           </div>
           <button 
+            type="button"
             className="cart-order-btn"
             onClick={handleOrder}
           >

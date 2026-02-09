@@ -69,9 +69,11 @@ function CartPage() {
     dispatch(addToCart(product))
   }
 
-  const handleOrder = () => {
+  const handleOrder = (e) => {
+    if (e && e.preventDefault) e.preventDefault()
     if (items.length === 0) return
     setShowPaymentStub(true)
+    // Stub only — no API call, no logout, no redirect
   }
 
   return (
