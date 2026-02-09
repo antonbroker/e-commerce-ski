@@ -13,6 +13,7 @@ import Account from './pages/Account'
 import CartPage from './pages/CartPage'
 import AuthInitializer from './components/AuthInitializer'
 import Cart from './components/Cart'
+import GuideChat from './components/GuideChat'
 import Navigation from './components/Navigation'
 
 /**
@@ -130,8 +131,13 @@ function App() {
           {/* Navigation shown only for authenticated users */}
           {isAuthenticated && <Navigation />}
           <AppRoutes />
-          {/* Cart for customer only; hidden for admin */}
-          {isAuthenticated && user?.role !== 'admin' && <Cart />}
+          {/* Cart and Ski Guide chat for customer only; hidden for admin */}
+          {isAuthenticated && user?.role !== 'admin' && (
+            <>
+              <GuideChat />
+              <Cart />
+            </>
+          )}
         </div>
       </Router>
     </AuthInitializer>

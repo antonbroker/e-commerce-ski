@@ -122,6 +122,12 @@ Phases:
 - [x] Frontend: in cart under items block "Recommended for you" with recommendation cards (image, price, Add to cart).
 - [x] Cart panel widened for recommendations block.
 
+### Optional: Ski Guide chat widget
+- [x] GuideChat component: floating icon (🎿) bottom-right above cart; panel with header "Ski Guide", messages area, input + Send. First message from guide on open; send adds user + stub reply (API later).
+- [x] Styles: guide-chat.css — icon at bottom above cart, panel above icon; shown for customer only (App.jsx).
+- [x] OpenAI for real replies: backend POST /api/guide-chat (guideChatService, controller, routes), system prompt for ski guide; client guideChatService.sendGuideChat(messages), GuideChat sends history and shows reply, loading state and error in chat.
+- [x] Guide knows catalog: backend loads all products from DB, passes catalog (id, title, category, price, size, length, brand) to LLM; prompt asks to recommend specific products and output PRODUCT_IDS: id1,id2; service parses IDs, fetches full products, returns { reply, products }; frontend shows product cards under guide message (image, title, price, Add to cart + link to catalog).
+
 ---
 
 ### Deployment (Render + Vercel)

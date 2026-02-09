@@ -10,6 +10,7 @@ const productRoutes = require('./routes/productRoutes')
 const orderRoutes = require('./routes/orderRoutes')
 const adminRoutes = require('./routes/adminRoutes')
 const recommendationRoutes = require('./routes/recommendationRoutes')
+const guideChatRoutes = require('./routes/guideChatRoutes')
 
 // Initialization of Express application
 const app = express()
@@ -62,6 +63,9 @@ app.use('/api/orders', orderRoutes)
 
 // Recommendations (auth required)
 app.use('/api/recommendations', recommendationRoutes)
+
+// Ski Guide chat (auth required)
+app.use('/api/guide-chat', guideChatRoutes)
 
 // Admin-only routes (auth + isAdmin required)
 app.use('/api/admin', adminRoutes)
