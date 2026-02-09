@@ -54,21 +54,27 @@
   display: block;
 }
 
-/* Google button: full width, don't override inner layout (fixes broken "red semicircle" rendering) */
+/* Google button: same width as Login button and inputs (full width of form) */
 .auth-google-wrap {
   display: block;
   width: 100%;
+  min-width: 100%;
   margin-top: 0.75rem;
+  box-sizing: border-box;
 }
 
 .auth-google-wrap > div {
   display: block !important;
   width: 100% !important;
+  min-width: 100% !important;
   max-width: 100% !important;
+  box-sizing: border-box !important;
 }
 
 .auth-google-wrap iframe {
   width: 100% !important;
+  min-width: 100% !important;
   max-width: 100% !important;
   min-height: 44px;
+  box-sizing: border-box !important;
 }
