@@ -10,14 +10,19 @@ const categoryService = require('../services/categoryService')
  * - Handling errors
  */
 
+// Temporarily hide empty categories from catalog/admin (uncomment to show again)
+const HIDDEN_CATEGORY_NAMES = ['clothing', 'accessories']
+
 /**
  * Get all categories
  * GET /api/categories
  */
 const getAllCategoriesController = async (req, res) => {
   try {
-    const categories = await categoryService.getAllCategories()
-    
+    let categories = await categoryService.getAllCategories()
+    categories = categories.filter(
+      (c) => !HIDDEN_CATEGORY_NAMES.includes((c.name || '').toLowerCase().trim())
+    )
     res.status(200).json({
       categories
     })
