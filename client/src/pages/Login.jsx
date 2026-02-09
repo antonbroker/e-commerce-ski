@@ -128,16 +128,21 @@ function Login() {
 
         {import.meta.env.VITE_GOOGLE_CLIENT_ID && (
           <div className="auth-google-wrap">
-            <GoogleLogin
-              onSuccess={handleGoogleSuccess}
-              onError={() => setError('Google sign-in was cancelled or failed')}
-              useOneTap={false}
-              theme="outline"
-              size="large"
-              text="continue_with"
-              shape="rectangular"
-              width="100%"
-            />
+            <span className={`auth-google-custom-btn ${googleLoading ? 'auth-google-custom-btn-loading' : ''}`} role="presentation">
+              {googleLoading ? 'Signing in…' : 'Continue with Google'}
+            </span>
+            <div className={`auth-google-overlay ${googleLoading ? 'auth-google-overlay-loading' : ''}`}>
+              <GoogleLogin
+                onSuccess={handleGoogleSuccess}
+                onError={() => setError('Google sign-in was cancelled or failed')}
+                useOneTap={false}
+                theme="outline"
+                size="large"
+                text="continue_with"
+                shape="rectangular"
+                width="100%"
+              />
+            </div>
           </div>
         )}
 
