@@ -12,6 +12,42 @@
   padding: 20px;
 }
 
+.catalog-order-thanks {
+  max-width: 1600px;
+  margin: 0 auto 20px;
+  padding: 1rem 1.25rem;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.catalog-order-thanks p {
+  margin: 0;
+  color: #065f46;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.catalog-order-thanks-close {
+  padding: 0.25rem 0.5rem;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: #047857;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.catalog-order-thanks-close:hover {
+  background: #a7f3d0;
+  color: #065f46;
+}
+
 .catalog-layout {
   display: grid;
   grid-template-columns: 280px 1fr;

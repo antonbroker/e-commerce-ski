@@ -1,17 +1,20 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { updateQuantity, removeFromCart, addToCart } from '../store/slices/cartSlice'
+import { updateQuantity, removeFromCart, addToCart, clearCart } from '../store/slices/cartSlice'
+import { createOrder } from '../services/orderService'
 import { getRecommendations } from '../services/recommendationService'
 
 /**
- * Cart - open/close, list, totals, Order button (shows payment coming soon stub)
+ * Cart - open/close, list, totals, Order button (creates order, redirects to catalog with thank you)
  */
 
 function Cart() {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const { items, totalItems, totalPrice } = useSelector((state) => state.cart)
   const [isOpen, setIsOpen] = useState(false)
-  const [showPaymentStub, setShowPaymentStub] = useState(false)
+  const [orderLoading, setOrderLoading] = useState(false)
   const [recommendations, setRecommendations] = useState([])
   const [recommendationsLoading, setRecommendationsLoading] = useState(false)
 
@@ -75,11 +78,27 @@ function Cart() {
     dispatch(addToCart(product))
   }
 
-  const handleOrder = (e) => {
+  const handleOrder = async (e) => {
     if (e && e.preventDefault) e.preventDefault()
     if (items.length === 0) return
-    setShowPaymentStub(true)
-    // Stub only — no API call, no logout, no redirect
+    setOrderLoading(true)
+    try {
+      await createOrder({
+        items: items.map((item) => ({
+          productId: item.product._id,
+          quantity: item.quantity
+        })),
+        totalAmount: totalPrice
+      })
+      dispatch(clearCart())
+      setIsOpen(false)
+      navigate('/catalog', { state: { orderSuccess: true } })
+    } catch (err) {
+      const message = err.response?.data?.error || err.message || 'Order failed'
+      alert(message)
+    } finally {
+      setOrderLoading(false)
+    }
   }
 
   // When cart is closed, show only the toggle button
@@ -199,12 +218,6 @@ function Cart() {
       {/* Cart Footer */}
       {items.length > 0 && (
         <div className="cart-footer">
-          {showPaymentStub && (
-            <div className="cart-payment-stub">
-              <p>Payment system coming soon</p>
-              <button type="button" className="cart-payment-stub-close" onClick={() => setShowPaymentStub(false)}>OK</button>
-            </div>
-          )}
           <div className="cart-total">
             <span>Total:</span>
             <span>${totalPrice.toFixed(2)}</span>
@@ -213,8 +226,9 @@ function Cart() {
             type="button"
             className="cart-order-btn"
             onClick={handleOrder}
+            disabled={orderLoading}
           >
-            Order
+            {orderLoading ? 'Placing order...' : 'Order'}
           </button>
         </div>
       )}

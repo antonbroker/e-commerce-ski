@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { getAllProducts, getFilterOptions } from '../services/productService'
 import { getAllCategories } from '../services/categoryService'
@@ -17,7 +18,10 @@ import RangeSlider from '../components/filters/RangeSlider'
 
 function Catalog() {
   const dispatch = useDispatch()
+  const location = useLocation()
+  const navigate = useNavigate()
   const { items: cartItems } = useSelector((state) => state.cart)
+  const [showOrderThanks, setShowOrderThanks] = useState(!!location.state?.orderSuccess)
 
   const [products, setProducts] = useState([])
   const [categories, setCategories] = useState([])
@@ -78,6 +82,13 @@ function Catalog() {
       [section]: !prev[section]
     }))
   }
+
+  // Clear orderSuccess from location so refresh doesn't show banner again
+  useEffect(() => {
+    if (location.state?.orderSuccess) {
+      navigate(location.pathname, { replace: true, state: {} })
+    }
+  }, [location.state?.orderSuccess, location.pathname, navigate])
 
   // Load categories and filter options on mount
   useEffect(() => {
@@ -241,6 +252,12 @@ function Catalog() {
 
   return (
     <div className="catalog-page">
+      {showOrderThanks && (
+        <div className="catalog-order-thanks">
+          <p>Thank you for your purchase!</p>
+          <button type="button" className="catalog-order-thanks-close" onClick={() => setShowOrderThanks(false)} aria-label="Close">×</button>
+        </div>
+      )}
       <div className="catalog-layout">
         {/* ========== SIDEBAR FILTERS ========== */}
         <aside className="catalog-sidebar">
