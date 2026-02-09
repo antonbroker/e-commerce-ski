@@ -40,18 +40,22 @@
   color: #111;
 }
 
-/* Google button: white, same width as Login button */
+/* Google button: full width, same as Login button */
 .auth-google-wrap {
+  display: block;
   width: 100%;
   margin-top: 0.75rem;
 }
 
-.auth-google-wrap > div {
+.auth-google-wrap > div,
+.auth-google-wrap > div > div {
   width: 100% !important;
-  max-width: 100%;
+  min-width: 100% !important;
+  max-width: 100% !important;
 }
 
 .auth-google-wrap iframe {
   width: 100% !important;
+  min-width: 100% !important;
   min-height: 44px;
 }
