@@ -40,6 +40,20 @@
   color: #111;
 }
 
+/* Login/Register form: full-width inputs and button */
+.login-container .login-form,
+.register-container .register-form {
+  width: 100%;
+}
+
+.login-container .login-form .btn-primary,
+.register-container .register-form .btn-primary {
+  width: 100% !important;
+  max-width: 100%;
+  box-sizing: border-box;
+  display: block;
+}
+
 /* Google button: full width, don't override inner layout (fixes broken "red semicircle" rendering) */
 .auth-google-wrap {
   display: block;
