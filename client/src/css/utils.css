@@ -19,6 +19,8 @@
   text-align: center;
   color: #666;
   font-size: 0.9375rem;
+  position: relative;
+  z-index: 2;
 }
 
 .auth-link a {

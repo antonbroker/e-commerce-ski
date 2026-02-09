@@ -59,8 +59,9 @@ function Register() {
       }
       navigate('/')
     } catch (err) {
-      // Error handling
-      setError(err.response?.data?.error || 'Registration failed. Please try again.')
+      const msg = err.response?.data?.error
+        || (err.response ? `Request failed (${err.response.status})` : err.message || 'Network error')
+      setError(msg)
     } finally {
       setLoading(false)
     }
